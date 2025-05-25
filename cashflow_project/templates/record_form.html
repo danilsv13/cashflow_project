@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить запись — Cashflow{% endblock %}
+
+{% block content %}
+<h1>Добавить запись о движении денежных средств</h1>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-3">
+        {{ form.manual_date.label_tag }}
+        {{ form.manual_date }}
+        {{ form.manual_date.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.status.label_tag }}
+        {{ form.status }}
+        {{ form.status.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.type.label_tag }}
+        {{ form.type }}
+        {{ form.type.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+        {{ form.category.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.subcategory.label_tag }}
+        {{ form.subcategory }}
+        {{ form.subcategory.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.amount.label_tag }}
+        {{ form.amount }}
+        {{ form.amount.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.comment.label_tag }}
+        {{ form.comment }}
+        {{ form.comment.errors }}
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+{% endblock %}

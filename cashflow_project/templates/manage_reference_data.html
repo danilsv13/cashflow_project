@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Справочники — Cashflow{% endblock %}
+
+{% block content %}
+<h1>Управление справочниками</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Статусы</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ status_form.as_p }}
+            <button type="submit" name="submit_status" class="btn btn-success">Добавить статус</button>
+        </form>
+        <ul class="list-group mt-3">
+            {% for s in statuses %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ s.name }}</span>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'edit_reference' 'status' s.id %}" class="btn btn-link text-secondary p-0" title="Редактировать">
+                            ✏️
+                        </a>
+                        <a href="{% url 'delete_reference' 'status' s.id %}" class="btn btn-link text-danger p-0 ms-2" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этот элемент?');">
+                            🗑️
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Типы</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ type_form.as_p }}
+            <button type="submit" name="submit_type" class="btn btn-success">Добавить тип</button>
+        </form>
+        <ul class="list-group mt-3">
+            {% for t in types %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ t.name }}</span>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'edit_reference' 'type' t.id %}" class="btn btn-link text-secondary p-0" title="Редактировать">
+                            ✏️
+                        </a>
+                        <a href="{% url 'delete_reference' 'type' t.id %}" class="btn btn-link text-danger p-0 ms-2" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этот элемент?');">
+                            🗑️
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-6 mt-4">
+        <h4>Категории</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ category_form.as_p }}
+            <button type="submit" name="submit_category" class="btn btn-success">Добавить категорию</button>
+        </form>
+        <ul class="list-group mt-3">
+            {% for c in categories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ c.name }} (Тип: {{ c.type.name }})</span>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'edit_reference' 'category' c.id %}" class="btn btn-link text-secondary p-0" title="Редактировать">
+                            ✏️
+                        </a>
+                        <a href="{% url 'delete_reference' 'category' c.id %}" class="btn btn-link text-danger p-0 ms-2" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этот элемент?');">
+                            🗑️
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-6 mt-4">
+        <h4>Подкатегории</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ subcategory_form.as_p }}
+            <button type="submit" name="submit_subcategory" class="btn btn-success">Добавить подкатегорию</button>
+        </form>
+        <ul class="list-group mt-3">
+            {% for sub in subcategories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ sub.name }} (Категория: {{ sub.category.name }})</span>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'edit_reference' 'subcategory' sub.id %}" class="btn btn-link text-secondary p-0" title="Редактировать">
+                            ✏️
+                        </a>
+                        <a href="{% url 'delete_reference' 'subcategory' sub.id %}" class="btn btn-link text-danger p-0 ms-2" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этот элемент?');">
+                            🗑️
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Список записей — Cashflow{% endblock %}
+
+{% block content %}
+<h1>Список записей о движении денежных средств</h1>
+
+<h4>Фильтры</h4>
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-2">{{ filter_form.date_from.label_tag }}{{ filter_form.date_from }}</div>
+    <div class="col-md-2">{{ filter_form.date_to.label_tag }}{{ filter_form.date_to }}</div>
+    <div class="col-md-2">{{ filter_form.status.label_tag }}{{ filter_form.status }}</div>
+    <div class="col-md-2">{{ filter_form.type.label_tag }}{{ filter_form.type }}</div>
+    <div class="col-md-2">{{ filter_form.category.label_tag }}{{ filter_form.category }}</div>
+    <div class="col-md-2">{{ filter_form.subcategory.label_tag }}{{ filter_form.subcategory }}</div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Применить</button>
+        <a href="{% url 'record_list' %}" class="btn btn-secondary">Сбросить</a>
+    </div>
+</form>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Тип</th>
+            <th>Категория</th>
+            <th>Подкатегория</th>
+            <th>Сумма (₽)</th>
+            <th>Комментарий</th>
+            <th></th> <!-- кнопка "Удалить" -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.manual_date|default:record.created_at }}</td>
+            <td>{{ record.status.name }}</td>
+            <td>{{ record.type.name }}</td>
+            <td>{{ record.category.name }}</td>
+            <td>{{ record.subcategory.name }}</td>
+            <td>{{ record.amount }}</td>
+            <td>{{ record.comment }}</td>
+            <td>
+                <a href="{% url 'record_edit' record.id %}" class="btn btn-warning btn-sm">Редактировать</a>
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_record_id" value="{{ record.id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">Нет записей</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // При изменении типа
+    $('#id_type').change(function() {
+      let typeId = $(this).val();
+      $('#id_category').html('<option value="">Загрузка...</option>');
+      $('#id_subcategory').html('<option value="">Выберите подкатегорию</option>');
+
+      if (typeId) {
+        $.get("{% url 'get_categories_by_type' %}", { type_id: typeId }, function(data) {
+          $('#id_category').html('<option value="">Выберите категорию</option>');
+          $.each(data.categories, function(index, item) {
+            $('#id_category').append(new Option(item.name, item.id));
+          });
+        });
+      } else {
+        $('#id_category').html('<option value="">Выберите категорию</option>');
+        $('#id_subcategory').html('<option value="">Выберите подкатегорию</option>');
+      }
+    });
+
+    // При изменении категории
+    $('#id_category').change(function() {
+      let categoryId = $(this).val();
+      $('#id_subcategory').html('<option value="">Загрузка...</option>');
+
+      if (categoryId) {
+        $.get("{% url 'get_subcategories_by_category' %}", { category_id: categoryId }, function(data) {
+          $('#id_subcategory').html('<option value="">Выберите подкатегорию</option>');
+          $.each(data.subcategories, function(index, item) {
+            $('#id_subcategory').append(new Option(item.name, item.id));
+          });
+        });
+      } else {
+        $('#id_subcategory').html('<option value="">Выберите подкатегорию</option>');
+      }
+    });
+  });
+</script>
+
+{% endblock %}
+
+
+
