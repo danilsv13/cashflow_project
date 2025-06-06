@@ -32,19 +32,4 @@
 - HTML, CSS (Bootstrap), JavaScript
 
 
-## Установка и запуск
 
-1. Клонировать репозиторий:
-
-git clone https://github.com/твой_ник/имя_репозитория.git
-cd имя_репозитория
-
-2. Создать и активировать виртуальное окружение (рекомендуется):
-
-python -m venv env
-source env/bin/activate  # Linux/Mac
-.\venv\Scripts\activate    # Windows
-
-
-3. Запустить сервер разработки:
-python manage.py runserver
